@@ -1,0 +1,129 @@
+<extend name="Common/back"/>
+<block name="content">
+    <div id="content">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <button type="submit" form="form-brand" data-toggle="tooltip" title="保存" class="btn btn-primary">
+                        <i class="fa fa-save"></i>
+                    </button>
+                    <a href="" data-toggle="tooltip" title="取消" class="btn btn-default">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+                <h1>品牌</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="">首页</a>
+                    </li>
+                    <li>
+                        <a href="">品牌</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-pencil"></i>
+                        添加品牌
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form action="__SELF__" method="post" enctype="multipart/form-data" id="form-brand" class="form-horizontal">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab-general" data-toggle="tab">基本信息</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-general">
+                                <div class="form-group required">
+                                    <label class="col-sm-2 control-label" for="input-title">品牌名</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="title" value="{$data['title']}" placeholder="品牌名" id="input-title" class="form-control" data-remoteurl="{:U('ajax')}" />
+                                        <if condition="isset($message['title'])">
+                                            <label for="input-title" class="text-danger">{$message['title']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-site">官网</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="site" value="{$data['site']}" placeholder="官网" id="input-site" class="form-control" />
+                                        <if condition="isset($message['site'])">
+                                            <label for="input-title" class="text-danger">{$message['site']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="col-sm-2 control-label" for="input-sort_number">排序</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="sort_number" value="{$data['sort_number']}" placeholder="0" id="input-sort_number" class="form-control" />
+                                        <if condition="isset($message['sort_number'])">
+                                            <label for="input-title" class="text-danger">{$message['sort_number']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-logo">图片</label>
+                                    <div class="col-sm-10">
+                                        <input type="file" name="logo" id="input-logo"  />
+                                        <if condition="isset($message['logo'])">
+                                            <label for="input-title" class="text-danger"></label>
+                                        </if>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+<block name="appendJs">
+    <script  src="__PUBLIC__/Back/validate/jquery.validate.min.js"></script>
+    <script  src="__PUBLIC__/Back/validate/additional-methods.min.js"></script>
+    <script  src="__PUBLIC__/Back/validate/localization/messages_zh.min.js"></script>
+    <script  type="text/javascript">
+
+        $(function (){
+            $('#form-brand').validate({
+                rules:{
+                    title:{
+                        required:true,
+                        remote:$('#input-title').data('remoteurl'),
+                    },
+                    site:{
+                        url:true,
+                    },
+                    sort_number:{
+                        required:true,
+                        digits:true,
+                    }
+                },
+                messages:{
+                    title:{
+                        required:'请填写品牌名',
+                        remote:'品牌名已经存在',
+                    },
+                    site:{
+                        url:'网址不正确',
+                    },
+                    sort_number:{
+                        required:'请填写排序',
+                        digits:'使用数字',
+                    }
+                },
+                errorClass:'text-danger',
+            });
+        });
+
+    </script>
+
+
+
+</block>

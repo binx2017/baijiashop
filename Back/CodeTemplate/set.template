@@ -1,0 +1,103 @@
+<extend name="Common/back"/>
+<block name="content">
+    <div id="content">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <button type="submit" form="form-brand" data-toggle="tooltip" title="保存" class="btn btn-primary">
+                        <i class="fa fa-save"></i>
+                    </button>
+                    <a href="{:U('list')}" data-toggle="tooltip" title="取消" class="btn btn-default">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+                <h1>%COMMENT%</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="">首页</a>
+                    </li>
+                    <li>
+                        <a href="">%COMMENT%</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-pencil"></i>
+                        编辑%COMMENT%
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form action="__SELF__" method="post" enctype="multipart/form-data" id="form-brand" class="form-horizontal">
+                        <if condition="isset($data['%PK_FIELD%'])" >
+                            <input type="hidden" name="%PK_FIELD%" value="{$data['%PK_FIELD%']}" id="input-%PK_FIELD%">
+                        </if>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab-general" data-toggle="tab">基本信息</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-general">
+                            %FIELD_SET_LIST%
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+<block name="appendJs">
+    <script  src="__PUBLIC__/Back/validate/jquery.validate.min.js"></script>
+    <script  src="__PUBLIC__/Back/validate/additional-methods.min.js"></script>
+    <script  src="__PUBLIC__/Back/validate/localization/messages_zh.min.js"></script>
+    <script  type="text/javascript">
+
+        $(function (){
+            $('#form-brand').validate({
+                rules:{
+                    title:{
+                        required:true,
+                        remote:{
+                            url:$('#input-title').data('remoteurl'),
+                            data:{
+                                %PK_FIELD%:$('#input-%PK_FIELD%').val()
+                            }
+                        }
+                    },
+                    site:{
+                        url:true,
+                    },
+                    sort_number:{
+                        required:true,
+                        digits:true,
+                    }
+                },
+                messages:{
+                    title:{
+                        required:'请填写%COMMENT%名',
+                        remote:'%COMMENT%名已经存在',
+                    },
+                    site:{
+                        url:'网址不正确',
+                    },
+                    sort_number:{
+                        required:'请填写排序',
+                        digits:'使用数字',
+                    }
+                },
+                errorClass:'text-danger',
+            });
+        });
+
+    </script>
+
+
+
+</block>

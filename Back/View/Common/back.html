@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <title>控制面板<block name="title"></block> </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <block name="meta"></block>
+
+    <link href="__PUBLIC__/Back/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/Back/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/Back/stylesheet/stylesheet.css" type="text/css" rel="stylesheet" media="screen" />
+
+    <block name="appendCss"></block>
+
+</head>
+
+<body data-public="__PUBLIC__/" data-root="__ROOT__/">
+
+<div id="container">
+    <!--header独立-->
+    <include file="Common/header"/>
+
+    <nav id="column-left">
+        <!--profile独立-->
+        <include file="Common/profile"/>
+        <!--menu独立-->
+        <include file="Common/menu"/>
+        <!--stats独立-->
+        <include file="Common/stats"/>
+    </nav>
+
+    <block name="content"></block>
+
+    <!--footer独立-->
+    <include file="Common/footer"/>
+
+</div>
+<script type="text/javascript" src="__PUBLIC__/Back/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Back/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Back/javascript/common.js"></script>
+<block name="appendJs"></block>
+</body>
+
+</html>

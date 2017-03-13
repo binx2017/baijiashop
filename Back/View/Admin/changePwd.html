@@ -1,0 +1,149 @@
+<extend name="Common/back"/>
+<block name="content">
+    <div id="content">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <button type="submit" form="form-brand" data-toggle="tooltip" title="保存" class="btn btn-primary" id="input-button">
+                        <i class="fa fa-save"></i>
+                    </button>
+                    <a href="{:U('list')}" data-toggle="tooltip" title="取消" class="btn btn-default">
+                        <i class="fa fa-reply"></i>
+                    </a>
+                </div>
+                <h1>管理员</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="">首页</a>
+                    </li>
+                    <li>
+                        <a href="">管理员</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-pencil"></i>
+                        编辑管理员
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form action="__SELF__" method="post" enctype="multipart/form-data" id="form-brand" class="form-horizontal">
+                        <if condition="isset($data['user_id'])" >
+                            <input type="hidden" name="user_id" value="{$data['user_id']}" id="input-user_id">
+                        </if>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab-general" data-toggle="tab">基本信息</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-general">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-username">用户名</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="username" value="{$data['username']}" placeholder="用户名" id="input-username" class="form-control" />
+                                        <if condition="isset($message['username'])">
+                                            <label for="input-username" class="text-danger">{$message['username']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-password">原密码</label>
+                                    <div class="col-sm-10" id="div-password">
+                                        <input type="password" name="OPassword" value="{$data['password']}" placeholder="密码" id="input-password" class="form-control" data-password="{:U('ajax')}" />
+                                        <if condition="isset($message['password'])">
+                                            <label for="input-password" class="text-danger">{$message['password']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="input-password">新密码</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" name="password" value="{$data['password']}" placeholder="密码" id="input-npassword"n class="form-control" />
+                                        <if condition="isset($message['password'])">
+                                            <label for="input-password" class="text-danger">{$message['password']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label" for="input-password">新密码确认</label>
+                                    <div class="col-sm-10" id="div-nnpassword">
+                                        <input type="password" name="NPassword" value="{$data['password']}" placeholder="密码" id="input-nnpassword" class="form-control"/>
+                                        <if condition="isset($message['password'])">
+                                            <label for="input-password" class="text-danger">{$message['password']}</label>
+                                        </if>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block>
+<block name="appendJs">
+    <script  src="__PUBLIC__/Back/validate/jquery.validate.min.js"></script>
+    <script  src="__PUBLIC__/Back/validate/additional-methods.min.js"></script>
+    <script  src="__PUBLIC__/Back/validate/localization/messages_zh.min.js"></script>
+    <script  type="text/javascript">
+
+       $(function () {
+          $('#input-password').change(function (evt) {
+             var url =  $(this).data('password');
+             var data = {
+                 username:$('#input-username').val(),
+                 password:$(this).val()
+             };
+             $.get(url,data,function (response) {
+                 var html = '';
+                 if (response.status == 1){
+                     $('span').remove();
+                   html = '<span id="span-message">密码正确</span>';
+                   $('#div-password').append(html);
+                   $('#span-message').attr('class','text-primary');
+                     $('#input-npassword').prop('disabled',false);
+
+                 }else if(response.status == 0){
+                        $('span').remove();
+                         html = '<span id="span-message">密码不正确</span>';
+                         $('#div-password').append(html);
+                         $('#span-message').attr('class','text-danger');
+                         $('#input-npassword').prop('disabled',true);
+                 }
+             },'json');
+          });
+       });
+
+    </script>
+    <script>
+        $(function () {
+            $('#input-nnpassword').change(function (evt) {
+                var html = '';
+                var val = $('#input-npassword').val();
+                if ($(this).val() !== val){
+                    $('span').remove();
+                    html = '<span id="span-messages">两次密码不一致</span>';
+                    $('#div-nnpassword').append(html);
+                    $('#span-messages').attr('class','text-danger');
+                    $('#input-button').prop('disabled',true);
+                }else{
+                    $('span').remove();
+                    html = '<span id="span-messages">密码一致</span>';
+                    $('#div-nnpassword').append(html);
+                    $('#span-messages').attr('class','text-primary');
+                    $('#input-button').prop('disabled',false);
+                }
+            }) ;
+        });
+    </script>
+
+
+</block>

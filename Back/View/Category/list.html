@@ -1,0 +1,174 @@
+<extend name="Common/back" />
+<block name="content" >
+    <div id="content">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <a href="{:U('set')}" data-toggle="tooltip" title="新增" class="btn btn-primary"> <i class="fa fa-plus"></i>
+                    </a>
+                    <button type="button" data-toggle="tooltip" title="删除" class="btn btn-danger" id="button-delete" >
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+                <h1>分类管理</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="">首页</a>
+                    </li>
+                    <li>
+                        <a href="">分类管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-list"></i>
+                       分类列表
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+
+                    </div>
+                    <form action="{:U('multi')}" method="post" enctype="multipart/form-data" id="form-list">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <td style="width: 1px;" class="text-center">
+                                        <input type="checkbox" id="input-all">
+                                    </td>
+                                    
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'category_title')}" class="{:sortClass($sort,'category_title')}">分类标题</a>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'parent_id')}" class="{:sortClass($sort,'parent_id')}">上级分类</a>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'sort_number')}" class="{:sortClass($sort,'sort_number')}">排序</a>
+                                    </td> <td class="text-center">创建时间</td>
+
+                                    <td class="text-right">管理</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="rows" id="row">
+                                    <tr data-deep="{$row['deep']}" data-status="hide" style="<if condition="$row['deep'] neq 0">display:none;</if>">
+                                        <td class="text-center">
+                                            <input type="checkbox" name="selected[]" value="{$row['category_id']}" />
+                                        </td>
+                                        <td class="text-left">
+                                        {:str_repeat('&nbsp;',$row['deep']*4)}
+                                            <a href="" class="link-deep" id="link-deep"><i class="fa fa-plus"></i> </a>
+                                            {$row['category_title']}
+
+                                        </td><td class="text-left">
+                                        {$row['parent_id']}
+                                        </td><td class="text-left">
+                                        {$row['sort_number']}
+                                        </td><td class="text-left">
+                                        {$row['created_at']}
+                                        </td>
+
+                                        <td class="text-right">
+                                            <a href="{:U('set',['category_id'=>$row['category_id']])}" data-toggle="tooltip" title="编辑" class="btn btn-primary">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+
+                                            <!-- <a href="{:U('Back/Goods/copy')}" data-toggle="tooltip" title="复制" class="btn btn-primary">
+                                              <i class="fa fa-copy"></i>
+                                            </a> -->
+                                        </td>
+                                    </tr>
+                                </volist>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <div class="row">
+                        {$page_html}
+                        <!--<div class="col-sm-6 text-left">-->
+                          <!---->
+                            <!--<ul class="pagination">-->
+                                <!--<li class="active">-->
+                                    <!--<span>1</span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">2</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">&gt;</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">&gt;|</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-6 text-right">显示开始 1 到 20 之 23 （总 2 页）</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="appendJs">
+    <script>
+        $(function(){
+           $('#input-all').click(function (evt) {
+               $(':checkbox[name="selected[]"]').prop('checked',$(this).prop('checked'));
+           }) ;
+        });
+    </script>
+    <script>
+        $(function(){
+           $('#button-delete').click(function (evt) {
+               if ($(':checkbox[name="selected[]"]:checked').size()>0) {
+                    if (confirm('确定删除么')){
+                        $('#form-list').submit();
+                    }
+               }
+           });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('a.link-deep').click(function (evt) {
+                //当前Tr
+                var currTr = $(this).parents('tr');
+                //后续Tr
+                var nextTrs = currTr.nextAll('tr');
+                //遍历所有的后续Tr
+                nextTrs.each(function (i) {
+                    //深度不比我大的，终止循环
+                    if ($(this).data('deep') <= currTr.data('deep')) return false;
+                    //根据当前状态选择隐藏或者展示
+                    if('show' == currTr.data('status')){
+                        //隐藏
+                        $(this).hide();
+                        $(this).data('status','hide');
+                        //Tr中找到i class=fa
+                        $(this).find('#link-deep>i.fa').removeClass('fa-minus').addClass('fa-plus');
+                    }else{
+                        $(this).show();
+                        $(this).data('status','show');
+                        //Tr中找到i class=fa
+                        $(this).find('#link-deep>i.fa').removeClass('fa-plus').addClass('fa-minus');
+                    }
+                });
+                if ('show' == currTr.data('status')){
+                    currTr.data('status','hide');
+                    currTr.find('#link-deep>i.fa').removeClass('fa-minus').addClass('fa-plus');
+                }else{
+                    currTr.data('status','show');
+                    currTr.find('#link-deep>i.fa').removeClass('fa-plus').addClass('fa-minus');
+                }
+                evt.preventDefault();
+            });
+        })
+    </script>
+</block>

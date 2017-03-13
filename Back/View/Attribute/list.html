@@ -1,0 +1,156 @@
+<extend name="Common/back" />
+<block name="content" >
+    <div id="content">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <a href="{:U('set')}" data-toggle="tooltip" title="新增" class="btn btn-primary"> <i class="fa fa-plus"></i>
+                    </a>
+                    <button type="button" data-toggle="tooltip" title="删除" class="btn btn-danger" id="button-delete" >
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+                <h1>属性管理</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="">首页</a>
+                    </li>
+                    <li>
+                        <a href="">属性管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-list"></i>
+                       属性列表
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+                        <form action="{:U('list')}" method="get">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label" for="input-type_id">类型</label>
+                                        <select name="type_id" id="input-type_id" class="form-control" >
+                                            <option value="0">全部</option>
+                                            <volist name="type_list" id="type">
+                                                <option value="{$type['type_id']}" <if condition="$type['type_id'] eq $filter['type_id']">selected</if> >{$type['type_title']}</option>
+                                            </volist>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" id="button-filter" class="btn btn-primary pull-right">
+                                        <i class="fa fa-search"></i>
+                                        筛选
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <form action="{:U('multi')}" method="post" enctype="multipart/form-data" id="form-list">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <td style="width: 1px;" class="text-center">
+                                        <input type="checkbox" id="input-all">
+                                    </td>
+                                     <td class="text-center">ID</td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'attribute_title')}" class="{:sortClass($sort,'attribute_title')}">属性</a>
+                                    </td> <td class="text-center">类型</td> <td class="text-center">输入类型</td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'sort_number')}" class="{:sortClass($sort,'sort_number')}">排序</a>
+                                    </td>
+
+                                    <td class="text-right">管理</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="rows" id="row">
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="selected[]" value="{$row['attribute_id']}" />
+                                        </td>
+                                        <td class="text-left">
+{$row['attribute_id']}
+</td><td class="text-left">
+{$row['attribute_title']}
+</td><td class="text-left">
+{$row['type_id']}
+</td><td class="text-left">
+{$row['input_type_id']}
+</td><td class="text-left">
+{$row['sort_number']}
+</td>
+
+                                        <td class="text-right">
+                                            <a href="{:U('set',['attribute_id'=>$row['attribute_id']])}" data-toggle="tooltip" title="编辑" class="btn btn-primary">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+
+                                            <!-- <a href="{:U('Back/Goods/copy')}" data-toggle="tooltip" title="复制" class="btn btn-primary">
+                                              <i class="fa fa-copy"></i>
+                                            </a> -->
+                                        </td>
+                                    </tr>
+                                </volist>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <div class="row">
+                        {$page_html}
+                        <!--<div class="col-sm-6 text-left">-->
+                          <!---->
+                            <!--<ul class="pagination">-->
+                                <!--<li class="active">-->
+                                    <!--<span>1</span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">2</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">&gt;</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">&gt;|</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-6 text-right">显示开始 1 到 20 之 23 （总 2 页）</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="appendJs">
+    <script>
+        $(function(){
+           $('#input-all').click(function (evt) {
+               $(':checkbox[name="selected[]"]').prop('checked',$(this).prop('checked'));
+           }) ;
+        });
+    </script>
+    <script>
+        $(function(){
+           $('#button-delete').click(function (evt) {
+               if ($(':checkbox[name="selected[]"]:checked').size()>0) {
+                    if (confirm('确定删除么')){
+                        $('#form-list').submit();
+                    }
+               }
+           });
+        });
+    </script>
+</block>

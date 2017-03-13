@@ -1,0 +1,202 @@
+<extend name="Common/back" />
+<block name="content" >
+    <div id="content">
+        <div class="page-header">
+            <div class="container-fluid">
+                <div class="pull-right">
+                    <a href="{:U('set')}" data-toggle="tooltip" title="新增" class="btn btn-primary"> <i class="fa fa-plus"></i>
+                    </a>
+                    <button type="button" data-toggle="tooltip" title="删除" class="btn btn-danger" id="button-delete" >
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+                <h1>商品管理</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="">首页</a>
+                    </li>
+                    <li>
+                        <a href="">商品管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-list"></i>
+                       商品列表
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+
+                    </div>
+                    <form action="{:U('multi')}" method="post" enctype="multipart/form-data" id="form-list">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <td style="width: 1px;" class="text-center">
+                                        <input type="checkbox" id="input-all">
+                                    </td>
+                                    
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'name')}" class="{:sortClass($sort,'name')}">商品名称</a>
+                                    </td> <td class="text-center">图片</td> <td class="text-center">库存</td> <td class="text-center">库存单位</td> <td class="text-center">商品代码</td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'price')}" class="{:sortClass($sort,'price')}">本店售价</a>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'market_price')}" class="{:sortClass($sort,'market_price')}">市场价</a>
+                                    </td> <td class="text-center">税类型</td> <td class="text-center">最小起订</td> <td class="text-center">是否减少库存</td> <td class="text-center">库存状态</td> <td class="text-center">是否允许配送</td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'date_available')}" class="{:sortClass($sort,'date_available')}">供货日期</a>
+                                    </td> <td class="text-center">长</td> <td class="text-center">宽</td> <td class="text-center">高</td> <td class="text-center">长度单位</td> <td class="text-center">重量</td> <td class="text-center">重量单位</td> <td class="text-center">收否可用</td> <td class="text-center">商品描述</td> <td class="text-center">是否被删除</td> <td class="text-center">META标题</td> <td class="text-center">META关键字</td> <td class="text-center">META描述</td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'brand_id')}" class="{:sortClass($sort,'brand_id')}">品牌</a>
+                                    </td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'type_id')}" class="{:sortClass($sort,'type_id')}">类型</a>
+                                    </td> <td class="text-center">分类</td>
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'sort_number')}" class="{:sortClass($sort,'sort_number')}">排序</a>
+                                    </td> <td class="text-center">修改时间</td>
+
+                                    <td class="text-right">管理</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <volist name="rows" id="row">
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="selected[]" value="{$row['goods_id']}" />
+                                        </td>
+                                        <td class="text-left">
+{$row['name']}
+</td><td class="text-left">
+<img src="__PUBLIC__/Thumb/{$row['image_thumb']}" alt="LOGO" width="50">
+</td><td class="text-left">
+{$row['quantity']}
+</td><td class="text-left">
+{$row['sku_id']}
+</td><td class="text-left">
+{$row['upc']}
+</td><td class="text-left">
+{$row['price']}
+</td><td class="text-left">
+{$row['market_price']}
+</td><td class="text-left">
+{$row['tax_id']}
+</td><td class="text-left">
+{$row['minimum']}
+</td><td class="text-left">
+{$row['subtract']}
+</td><td class="text-left">
+{$row['stock_status_id']}
+</td><td class="text-left">
+{$row['shipping']}
+</td><td class="text-left">
+{$row['date_available']}
+</td><td class="text-left">
+{$row['length']}
+</td><td class="text-left">
+{$row['width']}
+</td><td class="text-left">
+{$row['height']}
+</td><td class="text-left">
+{$row['length_unit_id']}
+</td><td class="text-left">
+{$row['weight']}
+</td><td class="text-left">
+{$row['weight_unit_id']}
+</td><td class="text-left">
+{$row['status']}
+</td><td class="text-left">
+{$row['description']}
+</td><td class="text-left">
+{$row['deleted']}
+</td><td class="text-left">
+{$row['meta_title']}
+</td><td class="text-left">
+{$row['meta_keywords']}
+</td><td class="text-left">
+{$row['meta_description']}
+</td><td class="text-left">
+{$row['brand_id']}
+</td><td class="text-left">
+{$row['type_id']}
+</td><td class="text-left">
+{$row['category_id']}
+</td><td class="text-left">
+{$row['sort_number']}
+</td><td class="text-left">
+{$row['updated_at']}
+</td>
+
+                                        <td class="text-right">
+                                            <a href="{:U('set',['goods_id'=>$row['goods_id']])}" data-toggle="tooltip" title="编辑" class="btn btn-primary">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="{:U('product',['goods_id'=>$row['goods_id']])}" data-toggle="tooltip" title="货" class="btn btn-primary">
+                                                货
+                                            </a>
+
+                                            <!-- <a href="{:U('Back/Goods/copy')}" data-toggle="tooltip" title="复制" class="btn btn-primary">
+                                              <i class="fa fa-copy"></i>
+                                            </a> -->
+                                        </td>
+                                    </tr>
+                                </volist>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                    <div class="row">
+                        {$page_html}
+                        <!--<div class="col-sm-6 text-left">-->
+                          <!---->
+                            <!--<ul class="pagination">-->
+                                <!--<li class="active">-->
+                                    <!--<span>1</span>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">2</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">&gt;</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="">&gt;|</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-6 text-right">显示开始 1 到 20 之 23 （总 2 页）</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="appendJs">
+    <script>
+        $(function(){
+           $('#input-all').click(function (evt) {
+               $(':checkbox[name="selected[]"]').prop('checked',$(this).prop('checked'));
+           }) ;
+        });
+    </script>
+    <script>
+        $(function(){
+           $('#button-delete').click(function (evt) {
+               if ($(':checkbox[name="selected[]"]:checked').size()>0) {
+                    if (confirm('确定删除么')){
+                        $('#form-list').submit();
+                    }
+               }
+           });
+        });
+    </script>
+</block>

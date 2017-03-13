@@ -1,0 +1,4 @@
+
+                                    <td class="text-center" >
+                                        <a href="{:sortU('list',$filter,$sort,'%FIELD%')}" class="{:sortClass($sort,'%FIELD%')}">%FIELD_COMMENT%</a>
+                                    </td>
