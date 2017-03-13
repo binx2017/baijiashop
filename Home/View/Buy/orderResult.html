@@ -1,0 +1,103 @@
+<extend name="Common/home" />
+
+<block name="container">
+    <div class="container" id="container-order-info" data-order_sn="{$order_sn}" data-status-url="{:U('/orderStatus')}">
+        <ul class="breadcrumb">
+            <li><a href="{:U('/index')}"><i class="fa fa-home"></i></a></li>
+            <li><a href="{:U('/checkout')}">订单状态</a></li>
+        </ul>
+        <div class="row">
+            <div id="content" class="col-sm-12">
+                <h1>订单: {$order_sn}</h1>
+                <div class="panel-group" id="status-success" style="display:none;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                当前订单已成功, 你可以立即:
+                            </h4>
+                        </div>
+                        <div id="collapse-shipping-address" class="panel-collapse collapse in" aria-expanded="true" style="">
+                            <div class="panel-body">
+                                你可以:
+                                <a href="{:U('/pay', ['order_sn'=>$order_sn])}" class="btn btn-default">支付</a>
+                                <a href="{:U('/index')}" class="btn btn-default">继续购物</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group" id="status-processing" style="display:none;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                订单正在处理, 前面还有: <span id="before_number"></span> 个订单等待处理
+                            </h4>
+                        </div>
+                        <div id="" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                你可以:
+                                <a href="{:U('/index')}" class="btn btn-default">继续购物</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-group" id="status-error" style="display:none;">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                订单失败, 原因是: <span id="error-info"></span>
+                            </h4>
+                        </div>
+                        <div id="" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                你可以:
+                                <a href="{:U('/index')}" class="btn btn-default">重新购物</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="appendJs">
+
+    <script>
+        $(function() {
+
+            ;!function getOrderStatus() {
+                var data  = {
+                    'order_sn' :  $('#container-order-info').data('order_sn'),
+                };
+                var url = $('#container-order-info').data('status-url');
+                $.get(url, data, function(response) {
+                    if (0 == response.error) {
+                        switch (response.data.process_status) {
+                            case 'success':
+                                $('#status-success').show();
+                                // 其他的隐藏
+                                $('#status-success').siblings('div.panel-group').hide();
+                                break;
+
+                            case 'error':
+                                $('#status-error').show();
+                                $('#error-info').html(response.data.error_info);
+                                $('#status-error').siblings('div.panel-group').hide();
+                                break;
+
+                            case 'processing':
+                                $('#status-processing').show();
+                                $('#before_number').html(response.data.before_number);
+                                $('#status-processing').siblings('div.panel-group').hide();
+                                // 轮询
+                                setTimeout(getOrderStatus, 1000);
+                                break;
+                        }
+
+                    }
+                }, 'json');
+            }();
+
+        })
+    </script>
+</block>
